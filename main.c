@@ -691,6 +691,7 @@ int ctrlg(int f, int n)
 {
 	TTbeep();
 	kbdmode = STOP;
+	curwp->w_markp = NULL;  /* clear the current region selection */
 	mlwrite("(Aborted)");
 	return ABORT;
 }
