@@ -77,6 +77,7 @@ int docmd(char *cline)
 	int oldcle;		/* old contents of clexec flag */
 	char *oldestr;		/* original exec string */
 	char tkn[NSTRING];	/* next token off of command line */
+	char *value;
 
 	/* if we are scanning and not executing..go back here */
 	if (execlevel)
@@ -99,7 +100,8 @@ int docmd(char *cline)
 	/* process leadin argument */
 	if (gettyp(tkn) != TKCMD) {
 		f = TRUE;
-		strcpy(tkn, getval(tkn));
+		value = getval(tkn);
+		memmove(tkn, value, strlen(value)+1);
 		n = atoi(tkn);
 
 		/* and now get the command to execute */
@@ -229,6 +231,8 @@ int macarg(char *tok)
  */
 int nextarg(char *prompt, char *buffer, int size, int terminator)
 {
+	char *value;
+
 	/* if we are interactive, go get it! */
 	if (clexec == FALSE)
 		return getstring(prompt, buffer, size, terminator);
@@ -237,7 +241,8 @@ int nextarg(char *prompt, char *buffer, int size, int terminator)
 	execstr = token(execstr, buffer, size);
 
 	/* evaluate it */
-	strcpy(buffer, getval(buffer));
+	value = getval(buffer);
+	memmove(buffer, value, strlen(value)+1);
 	return TRUE;
 }
 

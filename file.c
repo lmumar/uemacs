@@ -246,8 +246,7 @@ int readin(char *fname, int lockfl)
 	if ((s = bclear(bp)) != TRUE)	/* Might be old.        */
 		return s;
 	bp->b_flag &= ~(BFINVS | BFCHG);
-	if (bp->b_fname != fname)
-		strcpy(bp->b_fname, fname);
+	memmove(bp->b_fname, fname, strlen(fname)+1);
 
 	/* let a user macro get hold of things...if he wants */
 	execute(META | SPEC | 'R', FALSE, 1);
