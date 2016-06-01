@@ -193,6 +193,7 @@ int getfile(char *fname, int lockfl)
 		curbp->b_markp = curwp->w_markp;
 		curbp->b_marko = curwp->w_marko;
 	}
+	bp->b_altb = curbp;
 	curbp = bp;		/* Switch to it.        */
 	curwp->w_bufp = bp;
 	curbp->b_nwnd++;

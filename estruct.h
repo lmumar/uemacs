@@ -451,6 +451,7 @@ struct window {
  */
 struct buffer {
         struct buffer *b_bufp;	/* Link to next struct buffer   */
+        struct buffer *b_altb;  /* Link to alternate buffer     */
 	struct line *b_dotp;	/* Link to "." struct line structure   */
 	struct line *b_markp;	/* The same as the above two,   */
 	struct line *b_linep;	/* Link to the header struct line      */

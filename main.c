@@ -279,10 +279,9 @@ int main(int argc, char **argv)
 
 	/* if there are any files to read, read the first one! */
 	bp = bfind("main", FALSE, 0);
-	if (firstfile == FALSE && (gflags & GFREAD)) {
+	if (firstfile == FALSE && (gflags & GFREAD))
 		swbuffer(firstbp);
-		zotbuf(bp);
-	} else
+	else
 		bp->b_mode |= gmode;
 
 	/* Deal with startup gotos and searches */

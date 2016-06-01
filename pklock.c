@@ -2,6 +2,7 @@
  *
  *	locking routines as modified by Petri Kutvonen
  */
+#include <stdarg.h>
 
 #include "estruct.h"
 #include "edef.h"

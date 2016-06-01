@@ -4,6 +4,7 @@
  * end their C function address. These are used for the bind-to-key
  * function.
 */
+#include <stdarg.h>
 
 #include "estruct.h"
 #include "edef.h"

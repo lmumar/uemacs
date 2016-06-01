@@ -7,6 +7,7 @@
  */
 
 #include <stdio.h>
+#include <stdarg.h>
 #include <unistd.h>
 
 #include "estruct.h"
@@ -72,6 +73,19 @@ int mlreply(char *prompt, char *buf, int nbuf)
 int mlreplyt(char *prompt, char *buf, int nbuf, int eolchar)
 {
 	return nextarg(prompt, buf, nbuf, eolchar);
+}
+
+int mlreplyv(char *fmt, char *buf, int nbuf, ...)
+{
+	va_list	ap;
+	char	prompt[NSTRING];
+	int	reply;
+
+	va_start(ap, nbuf);
+	vsformat(prompt, fmt, ap);
+	reply = nextarg(prompt, buf, nbuf, ctoec('\n'));
+	va_end(ap);
+	return reply;
 }
 
 /*

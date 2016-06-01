@@ -158,6 +158,7 @@ extern int typahead(void);
 extern int mlyesno(char *prompt);
 extern int mlreply(char *prompt, char *buf, int nbuf);
 extern int mlreplyt(char *prompt, char *buf, int nbuf, int eolchar);
+extern int mlreplyv(char *fmt, char *buf, int nbuf, ...);
 extern int ectoc(int c);
 extern int ctoec(int c);
 extern fn_t getname(void);
@@ -362,3 +363,6 @@ extern void lckerror(char *errstr);
 /* pklock.c */
 extern char *dolock(char *fname);
 extern char *undolock(char *fname);
+
+/* strfmt.c */
+extern int vsformat(char dest[NSTRING], const char *fmt, va_list ap);

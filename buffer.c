@@ -16,6 +16,19 @@
 #include "efunc.h"
 #include "line.h"
 
+static int usebufname(char *bufn)
+{
+	struct buffer *bp;
+
+	if (bufn == NULL)
+		return ABORT;
+	if (*bufn == '\0' && curbp->b_altb != NULL)
+		bp = curbp->b_altb;
+	else if ((bp = bfind(bufn, TRUE, 0)) == NULL)
+		return FALSE;
+	return swbuffer(bp);
+}
+
 /*
  * Attach a buffer to a window. The
  * values of dot and mark come from the buffer
@@ -24,15 +37,19 @@
  */
 int usebuffer(int f, int n)
 {
-	struct buffer *bp;
-	int s;
-	char bufn[NBUFN];
+	int 	s;
+	char 	bufn[NBUFN];
 
-	if ((s = mlreply("Use buffer: ", bufn, NBUFN)) != TRUE)
+	if (curbp->b_altb == NULL &&
+	    (curbp->b_altb = bfind("main", TRUE, 0)) == NULL)
+	    	s = mlreply("Use buffer: ", bufn, NBUFN);
+	else
+		s = mlreplyv("Use buffer: (default %s)", bufn, NBUFN, 
+			curbp->b_altb->b_bname);
+	if (s == ABORT)
 		return s;
-	if ((bp = bfind(bufn, TRUE, 0)) == NULL)
-		return FALSE;
-	return swbuffer(bp);
+
+	return usebufname(bufn);
 }
 
 /*
@@ -88,6 +105,7 @@ int swbuffer(struct buffer *bp)
 		curbp->b_markp = curwp->w_markp;
 		curbp->b_marko = curwp->w_marko;
 	}
+	bp->b_altb = curbp;
 	curbp = bp;		/* Switch.              */
 	if (curbp->b_active != TRUE) {	/* buffer not active yet */
 		/* read it in and activate it */
@@ -159,6 +177,8 @@ int zotbuf(struct buffer *bp)
 		mlwrite("Buffer is being displayed");
 		return FALSE;
 	}
+	if (curbp != NULL && curbp->b_altb == bp)
+		curbp->b_altb = NULL;
 	if ((s = bclear(bp)) != TRUE)	/* Blow text away.      */
 		return s;
 	free((char *) bp->b_linep);	/* Release header line. */
